@@ -1,0 +1,25 @@
+2026-05-02 03:18:34,616 - main - INFO - === Logging system initialized ===
+2026-05-02 03:18:34,617 - main - INFO - Log file: logs/app_20260502_031834.log
+2026-05-02 03:18:34,617 - main - INFO - Log level: INFO
+2026-05-02 03:18:34,617 - main - INFO - Timestamp: 20260502_031834
+2026-05-02 03:18:35,675 - main - INFO - Included router: routers.aihub.router
+2026-05-02 03:18:35,698 - main - INFO - Included router: routers.auth.router
+2026-05-02 03:18:35,763 - main - INFO - Included router: routers.camera_streams.router
+2026-05-02 03:18:35,817 - main - INFO - Included router: routers.environment_groups.router
+2026-05-02 03:18:35,882 - main - INFO - Included router: routers.facial_recognition_records.router
+2026-05-02 03:18:35,885 - main - INFO - Included router: routers.health.router
+2026-05-02 03:18:35,938 - main - INFO - Included router: routers.monitoring_events.router
+2026-05-02 03:18:35,984 - main - INFO - Included router: routers.monitoring_zones.router
+2026-05-02 03:18:36,026 - main - INFO - Included router: routers.sector_group_assignments.router
+2026-05-02 03:18:36,087 - main - INFO - Included router: routers.sectors.router
+2026-05-02 03:18:36,115 - main - INFO - Included router: routers.settings.router
+2026-05-02 03:18:36,166 - main - INFO - Included router: routers.storage.router
+2026-05-02 03:18:36,272 - main - INFO - Included router: routers.user.router
+2026-05-02 03:18:36,273 - main - INFO - === Application startup initiated ===
+2026-05-02 03:18:36,273 - services.database - INFO - Ignore creating tables
+2026-05-02 03:18:36,273 - services.mock_data - INFO - Ignore initialize data
+2026-05-02 03:18:36,274 - services.auth - INFO - Ignore initialize admin
+2026-05-02 03:18:36,274 - main - INFO - === Application startup completed successfully ===
+2026-05-02 03:18:48,703 - services.database - DEBUG - [DB_OP] Starting database close
+2026-05-02 03:18:48,704 - services.database - INFO - Database connections closed
+2026-05-02 03:18:48,704 - services.database - DEBUG - [DB_OP] Database close completed in 0.0008s

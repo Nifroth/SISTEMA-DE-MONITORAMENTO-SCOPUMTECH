@@ -1,0 +1,65 @@
+2026-05-02 03:53:55,899 - main - INFO - === Logging system initialized ===
+2026-05-02 03:53:55,899 - main - INFO - Log file: logs/app_20260502_035355.log
+2026-05-02 03:53:55,899 - main - INFO - Log level: INFO
+2026-05-02 03:53:55,899 - main - INFO - Timestamp: 20260502_035355
+2026-05-02 03:53:56,771 - main - INFO - Included router: routers.aihub.router
+2026-05-02 03:53:56,790 - main - INFO - Included router: routers.auth.router
+2026-05-02 03:53:56,839 - main - INFO - Included router: routers.camera_streams.router
+2026-05-02 03:53:56,883 - main - INFO - Included router: routers.environment_groups.router
+2026-05-02 03:53:56,927 - main - INFO - Included router: routers.facial_recognition_records.router
+2026-05-02 03:53:56,930 - main - INFO - Included router: routers.health.router
+2026-05-02 03:53:56,971 - main - INFO - Included router: routers.monitoring_events.router
+2026-05-02 03:53:57,025 - main - INFO - Included router: routers.monitoring_zones.router
+2026-05-02 03:53:57,037 - main - INFO - Included router: routers.rtsp_snapshot.router
+2026-05-02 03:53:57,074 - main - INFO - Included router: routers.sector_group_assignments.router
+2026-05-02 03:53:57,117 - main - INFO - Included router: routers.sectors.router
+2026-05-02 03:53:57,141 - main - INFO - Included router: routers.settings.router
+2026-05-02 03:53:57,280 - main - INFO - Included router: routers.storage.router
+2026-05-02 03:53:57,298 - main - INFO - Included router: routers.stream_converter.router
+2026-05-02 03:53:57,313 - main - INFO - Included router: routers.user.router
+2026-05-02 03:53:57,328 - main - WARNING - Failed to import module 'routers.yolo_detection': No module named 'cv2'
+2026-05-02 03:53:57,330 - main - INFO - === Application startup initiated ===
+2026-05-02 03:53:57,330 - services.database - INFO - Ignore creating tables
+2026-05-02 03:53:57,331 - services.mock_data - INFO - Ignore initialize data
+2026-05-02 03:53:57,331 - services.auth - INFO - Ignore initialize admin
+2026-05-02 03:53:57,331 - main - INFO - === Application startup completed successfully ===
+2026-05-02 03:55:54,037 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 03:55:54,037 - core.database - WARNING - Database session maker not available, attempting lazy initialization...
+2026-05-02 03:55:54,037 - core.database - WARNING - Database not initialized, attempting lazy initialization...
+2026-05-02 03:55:54,038 - core.database - INFO - Starting database initialization...
+2026-05-02 03:55:54,038 - core.config - DEBUG - Read dynamic attribute database_url from environment variable DATABASE_URL
+2026-05-02 03:55:54,038 - core.database - INFO - Normalizing database URL for async compatibility...
+2026-05-02 03:55:54,039 - core.database - INFO - Creating async database engine...
+2026-05-02 03:55:54,039 - core.database - INFO - Using QueuePool with connection pooling for non-Lambda environment
+2026-05-02 03:55:54,093 - core.database - INFO - Database engine created successfully
+2026-05-02 03:55:54,094 - core.database - INFO - Creating async session maker...
+2026-05-02 03:55:54,094 - core.database - INFO - Async session maker created successfully
+2026-05-02 03:55:54,094 - core.database - INFO - Database connection initialized successfully
+2026-05-02 03:55:54,094 - core.database - DEBUG - [DB_OP] Starting create_tables
+2026-05-02 03:55:54,094 - core.database - INFO - 🔧 Starting table creation...
+2026-05-02 03:55:54,100 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 03:55:54,100 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0003s
+2026-05-02 03:55:54,100 - routers.monitoring_zones - DEBUG - Querying monitoring_zoness: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-02 03:55:56,029 - routers.monitoring_zones - DEBUG - Found 6 monitoring_zoness
+2026-05-02 03:55:56,030 - core.database - DEBUG - [DB_OP] Database session cleanup after 1.9304s
+2026-05-02 03:55:56,410 - core.database - INFO - Tables initialized successfully
+2026-05-02 03:55:56,410 - core.database - DEBUG - [DB_OP] Create tables completed in 2.3163s
+2026-05-02 03:55:56,474 - core.database - INFO - Lazy database initialization completed successfully
+2026-05-02 03:55:56,474 - core.database - DEBUG - [DB_OP] Database session created successfully in 2.4373s
+2026-05-02 03:55:56,475 - routers.monitoring_events - DEBUG - Querying monitoring_eventss: query={}, sort=-timestamp, skip=0, limit=500, fields=None
+2026-05-02 03:55:57,111 - routers.monitoring_events - DEBUG - Found 30 monitoring_eventss
+2026-05-02 03:55:57,113 - core.database - DEBUG - [DB_OP] Database session cleanup after 3.0761s
+2026-05-02 03:56:28,099 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 03:56:28,099 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0007s
+2026-05-02 03:56:28,100 - routers.monitoring_events - DEBUG - Querying monitoring_eventss: query={}, sort=-timestamp, skip=0, limit=500, fields=None
+2026-05-02 03:56:28,102 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 03:56:28,102 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0003s
+2026-05-02 03:56:28,102 - routers.monitoring_zones - DEBUG - Querying monitoring_zoness: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-02 03:56:28,482 - routers.monitoring_zones - DEBUG - Found 6 monitoring_zoness
+2026-05-02 03:56:28,483 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.3812s
+2026-05-02 03:56:28,729 - routers.monitoring_events - DEBUG - Found 30 monitoring_eventss
+2026-05-02 03:56:28,730 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.6310s
+2026-05-02 03:56:38,261 - services.database - DEBUG - [DB_OP] Starting database close
+2026-05-02 03:56:38,408 - core.database - INFO - Database connection closed and engine disposed
+2026-05-02 03:56:38,408 - services.database - INFO - Database connections closed
+2026-05-02 03:56:38,409 - services.database - DEBUG - [DB_OP] Database close completed in 0.1476s

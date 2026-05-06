@@ -1,0 +1,47 @@
+{
+    "title": "facial_recognition_records",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "person_name": {
+            "type": "string",
+            "description": "Identified person name"
+        },
+        "person_id": {
+            "type": "string",
+            "description": "Unique person identifier"
+        },
+        "sector_id": {
+            "type": "integer",
+            "description": "Sector where recognition occurred"
+        },
+        "group_id": {
+            "type": "integer",
+            "description": "Environment group reference"
+        },
+        "confidence": {
+            "type": "number",
+            "description": "Recognition confidence score 0-1"
+        },
+        "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the recognition occurred"
+        },
+        "event_type": {
+            "type": "string",
+            "description": "Type: entry, exit, detection"
+        }
+    },
+    "required": [
+        "id",
+        "person_name",
+        "sector_id",
+        "confidence",
+        "timestamp",
+        "event_type"
+    ]
+}

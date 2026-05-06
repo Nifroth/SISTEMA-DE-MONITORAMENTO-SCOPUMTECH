@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Bloco A",
+        "description": "Bloco administrativo principal",
+        "color": "#3B82F6"
+    },
+    {
+        "name": "Bloco B",
+        "description": "Bloco de serviços e alimentação",
+        "color": "#10B981"
+    },
+    {
+        "name": "Bloco C",
+        "description": "Bloco de pesquisa e laboratórios",
+        "color": "#F59E0B"
+    },
+    {
+        "name": "Áreas Comuns",
+        "description": "Recepção, estacionamento e áreas compartilhadas",
+        "color": "#8B5CF6"
+    }
+]

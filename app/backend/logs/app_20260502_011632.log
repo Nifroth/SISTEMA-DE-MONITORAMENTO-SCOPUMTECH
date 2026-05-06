@@ -1,0 +1,112 @@
+2026-05-02 01:16:32,829 - main - INFO - === Logging system initialized ===
+2026-05-02 01:16:32,829 - main - INFO - Log file: logs/app_20260502_011632.log
+2026-05-02 01:16:32,829 - main - INFO - Log level: INFO
+2026-05-02 01:16:32,829 - main - INFO - Timestamp: 20260502_011632
+2026-05-02 01:16:33,745 - main - INFO - Included router: routers.aihub.router
+2026-05-02 01:16:33,764 - main - INFO - Included router: routers.auth.router
+2026-05-02 01:16:33,820 - main - INFO - Included router: routers.camera_streams.router
+2026-05-02 01:16:33,865 - main - INFO - Included router: routers.environment_groups.router
+2026-05-02 01:16:33,914 - main - INFO - Included router: routers.facial_recognition_records.router
+2026-05-02 01:16:33,917 - main - INFO - Included router: routers.health.router
+2026-05-02 01:16:33,962 - main - INFO - Included router: routers.monitoring_events.router
+2026-05-02 01:16:34,007 - main - INFO - Included router: routers.monitoring_zones.router
+2026-05-02 01:16:34,114 - main - INFO - Included router: routers.sector_group_assignments.router
+2026-05-02 01:16:34,162 - main - INFO - Included router: routers.sectors.router
+2026-05-02 01:16:34,191 - main - INFO - Included router: routers.settings.router
+2026-05-02 01:16:34,253 - main - INFO - Included router: routers.storage.router
+2026-05-02 01:16:34,388 - main - INFO - Included router: routers.user.router
+2026-05-02 01:16:34,391 - main - INFO - === Application startup initiated ===
+2026-05-02 01:16:34,391 - services.database - INFO - Ignore creating tables
+2026-05-02 01:16:34,391 - services.mock_data - INFO - Ignore initialize data
+2026-05-02 01:16:34,391 - services.auth - INFO - Ignore initialize admin
+2026-05-02 01:16:34,391 - main - INFO - === Application startup completed successfully ===
+2026-05-02 01:16:49,499 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:16:49,500 - core.database - WARNING - Database session maker not available, attempting lazy initialization...
+2026-05-02 01:16:49,500 - core.database - WARNING - Database not initialized, attempting lazy initialization...
+2026-05-02 01:16:49,500 - core.database - INFO - Starting database initialization...
+2026-05-02 01:16:49,500 - core.config - DEBUG - Read dynamic attribute database_url from environment variable DATABASE_URL
+2026-05-02 01:16:49,500 - core.database - INFO - Normalizing database URL for async compatibility...
+2026-05-02 01:16:49,501 - core.database - INFO - Creating async database engine...
+2026-05-02 01:16:49,501 - core.database - INFO - Using QueuePool with connection pooling for non-Lambda environment
+2026-05-02 01:16:49,549 - core.database - INFO - Database engine created successfully
+2026-05-02 01:16:49,549 - core.database - INFO - Creating async session maker...
+2026-05-02 01:16:49,549 - core.database - INFO - Async session maker created successfully
+2026-05-02 01:16:49,549 - core.database - INFO - Database connection initialized successfully
+2026-05-02 01:16:49,550 - core.database - DEBUG - [DB_OP] Starting create_tables
+2026-05-02 01:16:49,550 - core.database - INFO - 🔧 Starting table creation...
+2026-05-02 01:16:49,556 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:16:49,557 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0003s
+2026-05-02 01:16:49,557 - routers.monitoring_events - DEBUG - Querying monitoring_eventss: query={}, sort=-timestamp, skip=0, limit=500, fields=None
+2026-05-02 01:16:51,007 - routers.monitoring_events - DEBUG - Found 30 monitoring_eventss
+2026-05-02 01:16:51,008 - core.database - DEBUG - [DB_OP] Database session cleanup after 1.4520s
+2026-05-02 01:16:51,319 - core.database - INFO - Tables initialized successfully
+2026-05-02 01:16:51,319 - core.database - DEBUG - [DB_OP] Create tables completed in 1.7696s
+2026-05-02 01:16:51,383 - core.database - INFO - Lazy database initialization completed successfully
+2026-05-02 01:16:51,383 - core.database - DEBUG - [DB_OP] Database session created successfully in 1.8839s
+2026-05-02 01:16:51,384 - routers.monitoring_zones - DEBUG - Querying monitoring_zoness: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-02 01:16:51,961 - routers.monitoring_zones - DEBUG - Found 6 monitoring_zoness
+2026-05-02 01:16:51,962 - core.database - DEBUG - [DB_OP] Database session cleanup after 2.4625s
+2026-05-02 01:18:14,096 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:18:14,097 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0006s
+2026-05-02 01:18:14,097 - routers.monitoring_events - DEBUG - Querying monitoring_eventss: query={}, sort=-timestamp, skip=0, limit=500, fields=None
+2026-05-02 01:18:14,098 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:18:14,100 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0020s
+2026-05-02 01:18:14,101 - routers.monitoring_zones - DEBUG - Querying monitoring_zoness: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-02 01:18:14,477 - routers.monitoring_zones - DEBUG - Found 6 monitoring_zoness
+2026-05-02 01:18:14,478 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.3792s
+2026-05-02 01:18:14,729 - routers.monitoring_events - DEBUG - Found 30 monitoring_eventss
+2026-05-02 01:18:14,732 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.6355s
+2026-05-02 01:20:17,115 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:20:17,116 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0004s
+2026-05-02 01:20:17,116 - routers.camera_streams - DEBUG - Querying camera_streamss: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-02 01:20:17,118 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:20:17,118 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0004s
+2026-05-02 01:20:17,119 - routers.monitoring_zones - DEBUG - Querying monitoring_zoness: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-02 01:20:17,626 - routers.camera_streams - DEBUG - Found 6 camera_streamss
+2026-05-02 01:20:17,627 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.5121s
+2026-05-02 01:20:17,636 - routers.monitoring_zones - DEBUG - Found 6 monitoring_zoness
+2026-05-02 01:20:17,637 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.5192s
+2026-05-02 01:23:35,226 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:23:35,227 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0005s
+2026-05-02 01:23:35,227 - routers.monitoring_events - DEBUG - Querying monitoring_eventss: query={}, sort=-timestamp, skip=0, limit=500, fields=None
+2026-05-02 01:23:35,228 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:23:35,229 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0002s
+2026-05-02 01:23:35,229 - routers.monitoring_zones - DEBUG - Querying monitoring_zoness: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-02 01:23:35,731 - routers.monitoring_zones - DEBUG - Found 6 monitoring_zoness
+2026-05-02 01:23:35,733 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.5044s
+2026-05-02 01:23:35,796 - routers.monitoring_events - DEBUG - Found 30 monitoring_eventss
+2026-05-02 01:23:35,798 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.5720s
+2026-05-02 01:24:01,210 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:24:01,211 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0005s
+2026-05-02 01:24:01,211 - routers.monitoring_events - DEBUG - Querying monitoring_eventss: query={}, sort=-timestamp, skip=0, limit=500, fields=None
+2026-05-02 01:24:01,212 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:24:01,212 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0002s
+2026-05-02 01:24:01,213 - routers.monitoring_zones - DEBUG - Querying monitoring_zoness: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-02 01:24:01,591 - routers.monitoring_zones - DEBUG - Found 6 monitoring_zoness
+2026-05-02 01:24:01,592 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.3797s
+2026-05-02 01:24:01,656 - routers.monitoring_events - DEBUG - Found 30 monitoring_eventss
+2026-05-02 01:24:01,659 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.4482s
+2026-05-02 01:24:13,560 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:24:13,561 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0006s
+2026-05-02 01:24:13,561 - routers.monitoring_events - DEBUG - Querying monitoring_eventss: query={}, sort=-timestamp, skip=0, limit=500, fields=None
+2026-05-02 01:24:13,564 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:24:13,564 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0002s
+2026-05-02 01:24:13,564 - routers.monitoring_zones - DEBUG - Querying monitoring_zoness: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-02 01:24:13,941 - routers.monitoring_zones - DEBUG - Found 6 monitoring_zoness
+2026-05-02 01:24:13,942 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.3783s
+2026-05-02 01:24:14,003 - routers.monitoring_events - DEBUG - Found 30 monitoring_eventss
+2026-05-02 01:24:14,004 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.4435s
+2026-05-02 01:24:37,129 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:24:37,129 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0005s
+2026-05-02 01:24:37,130 - routers.camera_streams - DEBUG - Querying camera_streamss: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-02 01:24:37,131 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-02 01:24:37,131 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0002s
+2026-05-02 01:24:37,131 - routers.monitoring_zones - DEBUG - Querying monitoring_zoness: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-02 01:24:37,511 - routers.monitoring_zones - DEBUG - Found 6 monitoring_zoness
+2026-05-02 01:24:37,512 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.3808s
+2026-05-02 01:24:37,643 - routers.camera_streams - DEBUG - Found 6 camera_streamss
+2026-05-02 01:24:37,644 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.5154s
+2026-05-02 01:24:39,669 - services.database - DEBUG - [DB_OP] Starting database close
+2026-05-02 01:24:39,802 - core.database - INFO - Database connection closed and engine disposed
+2026-05-02 01:24:39,802 - services.database - INFO - Database connections closed
+2026-05-02 01:24:39,802 - services.database - DEBUG - [DB_OP] Database close completed in 0.1332s

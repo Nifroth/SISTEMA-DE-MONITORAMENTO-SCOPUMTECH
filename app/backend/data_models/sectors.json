@@ -1,0 +1,35 @@
+{
+    "title": "sectors",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "name": {
+            "type": "string",
+            "description": "Sector name"
+        },
+        "description": {
+            "type": "string",
+            "description": "Sector description"
+        },
+        "location": {
+            "type": "string",
+            "description": "Physical location"
+        },
+        "camera_id": {
+            "type": "string",
+            "description": "Associated camera identifier"
+        },
+        "status": {
+            "type": "string",
+            "description": "Sector status: active or inactive"
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "status"
+    ]
+}

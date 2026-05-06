@@ -1,0 +1,44 @@
+[
+    {
+        "name": "Recepção Principal",
+        "description": "Área de recepção e entrada principal do edifício",
+        "location": "Térreo - Entrada",
+        "camera_id": "CAM-001",
+        "status": "active"
+    },
+    {
+        "name": "Corredor Leste",
+        "description": "Corredor principal do bloco leste",
+        "location": "1º Andar - Bloco A",
+        "camera_id": "CAM-002",
+        "status": "active"
+    },
+    {
+        "name": "Estacionamento",
+        "description": "Área do estacionamento coberto",
+        "location": "Subsolo",
+        "camera_id": "CAM-003",
+        "status": "active"
+    },
+    {
+        "name": "Refeitório",
+        "description": "Área do refeitório e cozinha",
+        "location": "Térreo - Bloco B",
+        "camera_id": "CAM-004",
+        "status": "active"
+    },
+    {
+        "name": "Sala de Reuniões",
+        "description": "Conjunto de salas de reunião",
+        "location": "2º Andar - Bloco A",
+        "camera_id": "CAM-005",
+        "status": "active"
+    },
+    {
+        "name": "Laboratório",
+        "description": "Laboratório de pesquisa e desenvolvimento",
+        "location": "3º Andar - Bloco C",
+        "camera_id": "CAM-006",
+        "status": "inactive"
+    }
+]

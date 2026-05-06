@@ -1,0 +1,44 @@
+[
+    {
+        "name": "Entrada Principal",
+        "zone_type": "entrance",
+        "camera_id": "CAM-001",
+        "status": "active",
+        "location": "Lobby - Porta frontal"
+    },
+    {
+        "name": "Entrada Lateral",
+        "zone_type": "entrance",
+        "camera_id": "CAM-002",
+        "status": "active",
+        "location": "Corredor B - Porta lateral"
+    },
+    {
+        "name": "Saída Principal",
+        "zone_type": "exit",
+        "camera_id": "CAM-003",
+        "status": "active",
+        "location": "Lobby - Porta de saída"
+    },
+    {
+        "name": "Saída Estacionamento",
+        "zone_type": "exit",
+        "camera_id": "CAM-004",
+        "status": "active",
+        "location": "Subsolo - Acesso estacionamento"
+    },
+    {
+        "name": "Área Interna A",
+        "zone_type": "internal",
+        "camera_id": "CAM-005",
+        "status": "active",
+        "location": "Andar 1 - Corredor principal"
+    },
+    {
+        "name": "Área Interna B",
+        "zone_type": "internal",
+        "camera_id": "CAM-006",
+        "status": "inactive",
+        "location": "Andar 2 - Sala de reuniões"
+    }
+]

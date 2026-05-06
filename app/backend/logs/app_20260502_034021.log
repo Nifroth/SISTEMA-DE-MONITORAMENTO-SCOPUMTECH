@@ -1,0 +1,26 @@
+2026-05-02 03:40:21,625 - main - INFO - === Logging system initialized ===
+2026-05-02 03:40:21,626 - main - INFO - Log file: logs/app_20260502_034021.log
+2026-05-02 03:40:21,626 - main - INFO - Log level: INFO
+2026-05-02 03:40:21,626 - main - INFO - Timestamp: 20260502_034021
+2026-05-02 03:40:22,598 - main - INFO - Included router: routers.aihub.router
+2026-05-02 03:40:22,624 - main - INFO - Included router: routers.auth.router
+2026-05-02 03:40:22,673 - main - INFO - Included router: routers.camera_streams.router
+2026-05-02 03:40:22,716 - main - INFO - Included router: routers.environment_groups.router
+2026-05-02 03:40:22,767 - main - INFO - Included router: routers.facial_recognition_records.router
+2026-05-02 03:40:22,769 - main - INFO - Included router: routers.health.router
+2026-05-02 03:40:22,819 - main - INFO - Included router: routers.monitoring_events.router
+2026-05-02 03:40:22,865 - main - INFO - Included router: routers.monitoring_zones.router
+2026-05-02 03:40:22,909 - main - INFO - Included router: routers.sector_group_assignments.router
+2026-05-02 03:40:22,952 - main - INFO - Included router: routers.sectors.router
+2026-05-02 03:40:22,973 - main - INFO - Included router: routers.settings.router
+2026-05-02 03:40:23,013 - main - INFO - Included router: routers.storage.router
+2026-05-02 03:40:23,172 - main - INFO - Included router: routers.stream_converter.router
+2026-05-02 03:40:23,186 - main - INFO - Included router: routers.user.router
+2026-05-02 03:40:23,187 - main - INFO - === Application startup initiated ===
+2026-05-02 03:40:23,188 - services.database - INFO - Ignore creating tables
+2026-05-02 03:40:23,188 - services.mock_data - INFO - Ignore initialize data
+2026-05-02 03:40:23,188 - services.auth - INFO - Ignore initialize admin
+2026-05-02 03:40:23,189 - main - INFO - === Application startup completed successfully ===
+2026-05-02 03:40:23,591 - services.database - DEBUG - [DB_OP] Starting database close
+2026-05-02 03:40:23,591 - services.database - INFO - Database connections closed
+2026-05-02 03:40:23,591 - services.database - DEBUG - [DB_OP] Database close completed in 0.0005s

@@ -1,0 +1,68 @@
+[
+    {
+        "zone_id": 1,
+        "stream_url": "rtsp://192.168.1.101:554/stream1",
+        "protocol": "rtsp",
+        "hls_url": "",
+        "status": "online",
+        "resolution": "1920x1080",
+        "fps": 30,
+        "bitrate": "4Mbps",
+        "last_connected": "2026-05-01T14:30:00Z"
+    },
+    {
+        "zone_id": 2,
+        "stream_url": "rtsp://192.168.1.102:554/stream1",
+        "protocol": "rtsp",
+        "hls_url": "",
+        "status": "online",
+        "resolution": "1280x720",
+        "fps": 25,
+        "bitrate": "2Mbps",
+        "last_connected": "2026-05-01T14:28:00Z"
+    },
+    {
+        "zone_id": 3,
+        "stream_url": "rtmp://192.168.1.103:1935/live/cam3",
+        "protocol": "rtmp",
+        "hls_url": "",
+        "status": "offline",
+        "resolution": "1920x1080",
+        "fps": 30,
+        "bitrate": "4Mbps",
+        "last_connected": "2026-05-01T12:00:00Z"
+    },
+    {
+        "zone_id": 4,
+        "stream_url": "rtmp://192.168.1.104:1935/live/cam4",
+        "protocol": "rtmp",
+        "hls_url": "",
+        "status": "online",
+        "resolution": "1280x720",
+        "fps": 25,
+        "bitrate": "2Mbps",
+        "last_connected": "2026-05-01T14:25:00Z"
+    },
+    {
+        "zone_id": 5,
+        "stream_url": "rtsp://192.168.1.105:554/stream1",
+        "protocol": "rtsp",
+        "hls_url": "",
+        "status": "error",
+        "resolution": "1920x1080",
+        "fps": 30,
+        "bitrate": "4Mbps",
+        "last_connected": "2026-05-01T10:00:00Z"
+    },
+    {
+        "zone_id": 6,
+        "stream_url": "rtmp://192.168.1.106:1935/live/cam6",
+        "protocol": "rtmp",
+        "hls_url": "",
+        "status": "online",
+        "resolution": "1920x1080",
+        "fps": 30,
+        "bitrate": "4Mbps",
+        "last_connected": "2026-05-01T14:29:00Z"
+    }
+]

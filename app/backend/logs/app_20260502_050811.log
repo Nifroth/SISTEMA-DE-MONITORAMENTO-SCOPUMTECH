@@ -1,0 +1,25 @@
+2026-05-02 05:08:11,273 - main - INFO - === Logging system initialized ===
+2026-05-02 05:08:11,273 - main - INFO - Log file: logs/app_20260502_050811.log
+2026-05-02 05:08:11,273 - main - INFO - Log level: INFO
+2026-05-02 05:08:11,273 - main - INFO - Timestamp: 20260502_050811
+2026-05-02 05:08:12,254 - main - INFO - Included router: routers.aihub.router
+2026-05-02 05:08:12,271 - main - INFO - Included router: routers.auth.router
+2026-05-02 05:08:12,319 - main - INFO - Included router: routers.camera_streams.router
+2026-05-02 05:08:12,365 - main - INFO - Included router: routers.environment_groups.router
+2026-05-02 05:08:12,425 - main - INFO - Included router: routers.facial_recognition_records.router
+2026-05-02 05:08:12,428 - main - INFO - Included router: routers.health.router
+2026-05-02 05:08:12,482 - main - INFO - Included router: routers.monitoring_events.router
+2026-05-02 05:08:12,529 - main - INFO - Included router: routers.monitoring_zones.router
+2026-05-02 05:08:12,536 - main - INFO - Included router: routers.rtsp_snapshot.router
+2026-05-02 05:08:12,599 - main - INFO - Included router: routers.sector_group_assignments.router
+2026-05-02 05:08:12,666 - main - INFO - Included router: routers.sectors.router
+2026-05-02 05:08:12,702 - main - INFO - Included router: routers.settings.router
+2026-05-02 05:08:12,853 - main - INFO - Included router: routers.storage.router
+2026-05-02 05:08:12,871 - main - INFO - Included router: routers.stream_converter.router
+2026-05-02 05:08:12,882 - main - INFO - Included router: routers.user.router
+2026-05-02 05:08:12,886 - main - WARNING - Failed to import module 'routers.yolo_detection': No module named 'cv2'
+2026-05-02 05:08:12,888 - main - INFO - === Application startup initiated ===
+2026-05-02 05:08:12,888 - services.database - INFO - Ignore creating tables
+2026-05-02 05:08:12,888 - services.mock_data - INFO - Ignore initialize data
+2026-05-02 05:08:12,888 - services.auth - INFO - Ignore initialize admin
+2026-05-02 05:08:12,889 - main - INFO - === Application startup completed successfully ===

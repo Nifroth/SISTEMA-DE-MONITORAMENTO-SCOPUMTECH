@@ -1,0 +1,37 @@
+{
+    "title": "monitoring_zones",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "name": {
+            "type": "string",
+            "description": "Zone name (e.g., Main Entrance, Exit A)"
+        },
+        "zone_type": {
+            "type": "string",
+            "description": "Type: entrance, exit, internal"
+        },
+        "camera_id": {
+            "type": "string",
+            "description": "Associated camera identifier"
+        },
+        "status": {
+            "type": "string",
+            "description": "active or inactive"
+        },
+        "location": {
+            "type": "string",
+            "description": "Physical location description"
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "zone_type",
+        "camera_id",
+        "status"
+    ]
+}

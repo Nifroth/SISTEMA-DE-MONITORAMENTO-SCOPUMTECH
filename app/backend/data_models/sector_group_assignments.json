@@ -1,0 +1,23 @@
+{
+    "title": "sector_group_assignments",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "sector_id": {
+            "type": "integer",
+            "description": "Reference to sector"
+        },
+        "group_id": {
+            "type": "integer",
+            "description": "Reference to environment group"
+        }
+    },
+    "required": [
+        "id",
+        "sector_id",
+        "group_id"
+    ]
+}

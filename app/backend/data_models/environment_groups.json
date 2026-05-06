@@ -1,0 +1,26 @@
+{
+    "title": "environment_groups",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "name": {
+            "type": "string",
+            "description": "Group name"
+        },
+        "description": {
+            "type": "string",
+            "description": "Group description"
+        },
+        "color": {
+            "type": "string",
+            "description": "Color code for UI display"
+        }
+    },
+    "required": [
+        "id",
+        "name"
+    ]
+}

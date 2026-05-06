@@ -1,0 +1,38 @@
+{
+    "title": "monitoring_events",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "zone_id": {
+            "type": "integer",
+            "description": "Reference to monitoring zone"
+        },
+        "event_type": {
+            "type": "string",
+            "description": "entry or exit"
+        },
+        "person_type": {
+            "type": "string",
+            "description": "adult or child"
+        },
+        "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the event occurred"
+        },
+        "confidence": {
+            "type": "number",
+            "description": "Detection confidence score 0-1"
+        }
+    },
+    "required": [
+        "id",
+        "zone_id",
+        "event_type",
+        "person_type",
+        "timestamp"
+    ]
+}

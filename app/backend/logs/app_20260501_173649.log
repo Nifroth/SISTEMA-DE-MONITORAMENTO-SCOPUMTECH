@@ -1,0 +1,77 @@
+2026-05-01 17:36:49,696 - main - INFO - === Logging system initialized ===
+2026-05-01 17:36:49,697 - main - INFO - Log file: logs/app_20260501_173649.log
+2026-05-01 17:36:49,697 - main - INFO - Log level: INFO
+2026-05-01 17:36:49,697 - main - INFO - Timestamp: 20260501_173649
+2026-05-01 17:36:50,715 - main - INFO - Included router: routers.aihub.router
+2026-05-01 17:36:50,737 - main - INFO - Included router: routers.auth.router
+2026-05-01 17:36:50,742 - main - INFO - Included router: routers.health.router
+2026-05-01 17:36:50,798 - main - INFO - Included router: routers.monitoring_events.router
+2026-05-01 17:36:50,847 - main - INFO - Included router: routers.monitoring_zones.router
+2026-05-01 17:36:50,868 - main - INFO - Included router: routers.settings.router
+2026-05-01 17:36:50,901 - main - INFO - Included router: routers.storage.router
+2026-05-01 17:36:50,912 - main - INFO - Included router: routers.user.router
+2026-05-01 17:36:50,913 - main - INFO - === Application startup initiated ===
+2026-05-01 17:36:50,913 - services.database - INFO - Ignore creating tables
+2026-05-01 17:36:50,914 - services.mock_data - INFO - Ignore initialize data
+2026-05-01 17:36:50,914 - services.auth - INFO - Ignore initialize admin
+2026-05-01 17:36:50,914 - main - INFO - === Application startup completed successfully ===
+2026-05-01 17:36:55,162 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-01 17:36:55,162 - core.database - WARNING - Database session maker not available, attempting lazy initialization...
+2026-05-01 17:36:55,162 - core.database - WARNING - Database not initialized, attempting lazy initialization...
+2026-05-01 17:36:55,163 - core.database - INFO - Starting database initialization...
+2026-05-01 17:36:55,163 - core.config - DEBUG - Read dynamic attribute database_url from environment variable DATABASE_URL
+2026-05-01 17:36:55,163 - core.database - INFO - Normalizing database URL for async compatibility...
+2026-05-01 17:36:55,164 - core.database - INFO - Creating async database engine...
+2026-05-01 17:36:55,164 - core.database - INFO - Using QueuePool with connection pooling for non-Lambda environment
+2026-05-01 17:36:55,218 - core.database - INFO - Database engine created successfully
+2026-05-01 17:36:55,218 - core.database - INFO - Creating async session maker...
+2026-05-01 17:36:55,219 - core.database - INFO - Async session maker created successfully
+2026-05-01 17:36:55,220 - core.database - INFO - Database connection initialized successfully
+2026-05-01 17:36:55,220 - core.database - DEBUG - [DB_OP] Starting create_tables
+2026-05-01 17:36:55,220 - core.database - INFO - 🔧 Starting table creation...
+2026-05-01 17:36:55,226 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-01 17:36:55,226 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0003s
+2026-05-01 17:36:55,227 - routers.monitoring_events - DEBUG - Querying monitoring_eventss: query={}, sort=-timestamp, skip=0, limit=500, fields=None
+2026-05-01 17:36:56,645 - routers.monitoring_events - DEBUG - Found 30 monitoring_eventss
+2026-05-01 17:36:56,646 - core.database - DEBUG - [DB_OP] Database session cleanup after 1.4200s
+2026-05-01 17:36:56,654 - core.database - INFO - Tables initialized successfully
+2026-05-01 17:36:56,654 - core.database - DEBUG - [DB_OP] Create tables completed in 1.4341s
+2026-05-01 17:36:56,718 - core.database - INFO - Lazy database initialization completed successfully
+2026-05-01 17:36:56,718 - core.database - DEBUG - [DB_OP] Database session created successfully in 1.5566s
+2026-05-01 17:36:56,719 - routers.monitoring_zones - DEBUG - Querying monitoring_zoness: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-01 17:36:57,286 - routers.monitoring_zones - DEBUG - Found 6 monitoring_zoness
+2026-05-01 17:36:57,287 - core.database - DEBUG - [DB_OP] Database session cleanup after 2.1248s
+2026-05-01 17:37:52,150 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-01 17:37:52,151 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0004s
+2026-05-01 17:37:52,152 - routers.monitoring_zones - DEBUG - Querying monitoring_zoness: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-01 17:37:52,157 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-01 17:37:52,158 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0009s
+2026-05-01 17:37:52,158 - routers.monitoring_events - DEBUG - Querying monitoring_eventss: query={}, sort=-timestamp, skip=0, limit=20, fields=None
+2026-05-01 17:37:52,596 - routers.monitoring_events - DEBUG - Found 30 monitoring_eventss
+2026-05-01 17:37:52,597 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.4399s
+2026-05-01 17:37:52,728 - routers.monitoring_zones - DEBUG - Found 6 monitoring_zoness
+2026-05-01 17:37:52,730 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.5796s
+2026-05-01 17:38:03,172 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-01 17:38:03,172 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0005s
+2026-05-01 17:38:03,173 - routers.monitoring_zones - DEBUG - Querying monitoring_zoness: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-01 17:38:03,187 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-01 17:38:03,188 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0003s
+2026-05-01 17:38:03,188 - routers.monitoring_events - DEBUG - Querying monitoring_eventss: query={}, sort=-timestamp, skip=0, limit=500, fields=None
+2026-05-01 17:38:03,555 - routers.monitoring_zones - DEBUG - Found 6 monitoring_zoness
+2026-05-01 17:38:03,556 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.3840s
+2026-05-01 17:38:03,762 - routers.monitoring_events - DEBUG - Found 30 monitoring_eventss
+2026-05-01 17:38:03,763 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.5757s
+2026-05-01 17:43:17,653 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-01 17:43:17,653 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0005s
+2026-05-01 17:43:17,653 - routers.monitoring_events - DEBUG - Querying monitoring_eventss: query={}, sort=-timestamp, skip=0, limit=500, fields=None
+2026-05-01 17:43:17,655 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-01 17:43:17,655 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0002s
+2026-05-01 17:43:17,655 - routers.monitoring_zones - DEBUG - Querying monitoring_zoness: query={}, sort=None, skip=0, limit=50, fields=None
+2026-05-01 17:43:18,161 - routers.monitoring_zones - DEBUG - Found 6 monitoring_zoness
+2026-05-01 17:43:18,162 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.5074s
+2026-05-01 17:43:18,215 - routers.monitoring_events - DEBUG - Found 30 monitoring_eventss
+2026-05-01 17:43:18,216 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.5631s
+2026-05-01 17:47:04,492 - services.database - DEBUG - [DB_OP] Starting database close
+2026-05-01 17:47:04,631 - core.database - INFO - Database connection closed and engine disposed
+2026-05-01 17:47:04,631 - services.database - INFO - Database connections closed
+2026-05-01 17:47:04,631 - services.database - DEBUG - [DB_OP] Database close completed in 0.1391s

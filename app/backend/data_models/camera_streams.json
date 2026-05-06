@@ -1,0 +1,53 @@
+{
+    "title": "camera_streams",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "zone_id": {
+            "type": "integer",
+            "description": "Reference to monitoring zone"
+        },
+        "stream_url": {
+            "type": "string",
+            "description": "RTSP or RTMP stream URL"
+        },
+        "protocol": {
+            "type": "string",
+            "description": "Protocol type: rtsp or rtmp"
+        },
+        "hls_url": {
+            "type": "string",
+            "description": "Transcoded HLS URL for browser playback"
+        },
+        "status": {
+            "type": "string",
+            "description": "Connection status: online, offline, error"
+        },
+        "resolution": {
+            "type": "string",
+            "description": "Stream resolution e.g. 1920x1080"
+        },
+        "fps": {
+            "type": "integer",
+            "description": "Frames per second"
+        },
+        "bitrate": {
+            "type": "string",
+            "description": "Stream bitrate e.g. 4Mbps"
+        },
+        "last_connected": {
+            "type": "string",
+            "description": "Last successful connection timestamp"
+        }
+    },
+    "required": [
+        "id",
+        "zone_id",
+        "stream_url",
+        "protocol",
+        "status"
+    ]
+}
