@@ -11,7 +11,7 @@ import {
   Copy, Check, Zap, Info, ExternalLink
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import StreamPlayer, { StreamType } from '@/components/StreamPlayer';
+import StreamPlayer, { StreamType } from '@/components/stream/StreamPlayer';
 
 interface CameraFormData {
   zone_id: number;
@@ -165,9 +165,10 @@ export default function CamerasPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!formData.zone_id || !formData.ip_address) return;
+    if (!formData.zone_id) return;
 
-    const streamUrl = generateStreamUrl() || formData.stream_url;
+    const streamUrl = formData.stream_url || generateStreamUrl();
+    if (!streamUrl && !formData.hls_url) return;
 
     try {
       if (editingId) {
@@ -268,7 +269,7 @@ export default function CamerasPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Cadastro de Câmeras</h1>
-          <p className="text-slate-400 text-sm mt-1">Cadastre e gerencie câmeras RTSP/RTMP com suporte H.264 para visualização em tempo real</p>
+          <p className="text-slate-400 text-sm mt-1">Cadastre RTSP original e URL de visualização web sem sobrescrever links públicos</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex bg-[#1E293B] rounded-lg border border-slate-700 p-1">
@@ -376,7 +377,7 @@ export default function CamerasPage() {
                   type="text"
                   value={mediaConfig.serverUrl}
                   onChange={(e) => setMediaConfig({ ...mediaConfig, serverUrl: e.target.value })}
-                  placeholder="http://192.168.1.100:8888"
+                  placeholder="http://localhost:9997"
                   className="w-full bg-[#0F172A] border border-slate-600 rounded-lg px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 placeholder-slate-500 font-mono"
                 />
               </div>
@@ -555,14 +556,13 @@ export default function CamerasPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs text-slate-400 block mb-1">Endereço IP *</label>
+                  <label className="text-xs text-slate-400 block mb-1">Endereço IP (opcional)</label>
                   <input
                     type="text"
                     value={formData.ip_address}
                     onChange={(e) => handleIpChange(e.target.value)}
                     placeholder="192.168.1.100"
                     className="w-full bg-[#0F172A] border border-slate-600 rounded-lg px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 placeholder-slate-500"
-                    required
                   />
                 </div>
                 <div>
@@ -620,19 +620,19 @@ export default function CamerasPage() {
 
             {/* Stream URL Preview */}
             <div className="bg-[#0F172A] rounded-lg p-4 border border-slate-600">
-              <label className="text-xs text-slate-400 block mb-1">URL do Stream (gerada automaticamente)</label>
+              <label className="text-xs text-slate-400 block mb-1">URL RTSP/RTMP gerada automaticamente</label>
               <div className="flex items-center gap-2">
                 <code className="flex-1 text-sm text-green-400 font-mono break-all">
                   {generateStreamUrl() || 'Preencha o IP para gerar a URL...'}
                 </code>
               </div>
               <div className="mt-2">
-                <label className="text-xs text-slate-400 block mb-1">Ou insira manualmente:</label>
+                <label className="text-xs text-slate-400 block mb-1">URL RTSP original (manual)</label>
                 <input
                   type="text"
                   value={formData.stream_url}
                   onChange={(e) => setFormData({ ...formData, stream_url: e.target.value })}
-                  placeholder="rtsp://usuario:senha@ip:porta/stream"
+                  placeholder="rtsp://admin:senha@ip:porta/h264/ch1/main/av_stream"
                   className="w-full bg-[#1E293B] border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500 placeholder-slate-500 font-mono"
                 />
               </div>
@@ -653,7 +653,7 @@ export default function CamerasPage() {
                   disabled={!formData.ip_address && !formData.stream_url}
                 >
                   <Zap className="w-3.5 h-3.5 mr-1.5" />
-                  {useWebRtc ? 'Gerar URL WebRTC' : 'Converter RTSP → HLS'}
+                  {useWebRtc ? 'Gerar URL WebRTC sugerida' : 'Gerar URL HLS sugerida'}
                 </Button>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -757,12 +757,12 @@ export default function CamerasPage() {
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="md:col-span-3">
-                  <label className="text-xs text-slate-400 block mb-1">URL do Stream (H.264)</label>
+                  <label className="text-xs text-slate-400 block mb-1">URL de visualização no navegador</label>
                   <input
                     type="text"
                     value={formData.hls_url}
                     onChange={(e) => setFormData({ ...formData, hls_url: e.target.value })}
-                    placeholder="http://media-server:8080/live/camera1.m3u8 ou .flv ou .ts ou .mp4"
+                    placeholder="https://...trycloudflare.com/camera1/ ou http://host:8888/camera1/index.m3u8"
                     className="w-full bg-[#0F172A] border border-slate-600 rounded-lg px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 placeholder-slate-500 font-mono"
                   />
                 </div>
@@ -779,13 +779,30 @@ export default function CamerasPage() {
                     <option value="mpegts">MPEG-TS (.ts)</option>
                     <option value="mp4">MP4/H.264 (.mp4)</option>
                     <option value="webrtc">WebRTC (WHEP)</option>
+                    <option value="iframe">Iframe (página MediaMTX)</option>
                   </select>
                 </div>
               </div>
               <p className="text-xs text-slate-500 mt-2">
-                Formatos suportados: HLS (.m3u8), HTTP-FLV (.flv), MPEG-TS (.ts), MP4 (.mp4). Use &quot;Auto-detectar&quot; para detecção automática baseada na extensão da URL.
+                Informe RTSP no campo acima para origem da câmera. Aqui use a URL reproduzível no navegador (HLS/WebRTC/iframe).
               </p>
             </div>
+
+            {(formData.hls_url || formData.stream_url) && (
+              <div>
+                <h4 className="text-sm font-medium text-slate-300 mb-3">Preview instantâneo</h4>
+                <StreamPlayer
+                  zoneName={zones.find((z) => z.id === formData.zone_id)?.name || 'Preview'}
+                  status={formData.status}
+                  protocol={formData.protocol}
+                  resolution={formData.resolution}
+                  hlsUrl={formData.hls_url}
+                  rtspUrl={formData.stream_url}
+                  streamType={formData.stream_type}
+                  compact
+                />
+              </div>
+            )}
 
             {/* Actions */}
             <div className="flex gap-3 pt-2">

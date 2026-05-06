@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { fetchStreams, fetchZones, createStream, deleteStream, CameraStream, MonitoringZone } from '@/lib/api';
 import { Plus, Trash2, Settings, Radio, Wifi, WifiOff, AlertTriangle, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import StreamPlayer from '@/components/stream/StreamPlayer';
 
 export default function StreamConfigPage() {
   const [streams, setStreams] = useState<CameraStream[]>([]);
@@ -265,6 +266,7 @@ export default function StreamConfigPage() {
                 <th className="text-left px-4 py-3 text-xs font-medium text-slate-400 uppercase">URL do Stream</th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-slate-400 uppercase">Resolução</th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-slate-400 uppercase">Status</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-slate-400 uppercase">Preview</th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-slate-400 uppercase">Última Conexão</th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-slate-400 uppercase">Ações</th>
               </tr>
@@ -272,7 +274,7 @@ export default function StreamConfigPage() {
             <tbody>
               {streams.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="text-center py-8 text-slate-400">
+                  <td colSpan={8} className="text-center py-8 text-slate-400">
                     Nenhum stream configurado. Clique em &quot;Novo Stream&quot; para adicionar.
                   </td>
                 </tr>
@@ -303,6 +305,17 @@ export default function StreamConfigPage() {
                           <StatusIcon className="w-3.5 h-3.5" />
                           <span className="text-xs font-medium">{status.label}</span>
                         </div>
+                      </td>
+                      <td className="px-4 py-3 min-w-[220px]">
+                        <StreamPlayer
+                          zoneName={getZoneName(stream.zone_id)}
+                          status={stream.status}
+                          protocol={stream.protocol}
+                          resolution={stream.resolution}
+                          hlsUrl={stream.hls_url}
+                          rtspUrl={stream.stream_url}
+                          compact
+                        />
                       </td>
                       <td className="px-4 py-3 text-xs text-slate-400">
                         {stream.last_connected ? new Date(stream.last_connected).toLocaleString('pt-BR') : '—'}

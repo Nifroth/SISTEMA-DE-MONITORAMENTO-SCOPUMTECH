@@ -249,18 +249,24 @@ export interface MediaServerConfig {
 /** Generate HLS URL from RTSP URL based on media server config */
 export function generateHlsUrl(rtspUrl: string, config: MediaServerConfig): string {
   try {
+    if (!rtspUrl.toLowerCase().startsWith('rtsp://')) {
+      return '';
+    }
     const url = new URL(rtspUrl.replace('rtsp://', 'http://'));
-    const streamName = `cam_${url.hostname.replace(/\./g, '_')}${url.port && url.port !== '554' ? '_' + url.port : ''}`;
+    const pathPart = url.pathname.replace(/^\/+/, '').replace(/\/+$/, '').replace(/\//g, '_') || 'stream';
+    const streamName = `cam_${url.hostname.replace(/\./g, '_')}${url.port && url.port !== '554' ? '_' + url.port : ''}_${pathPart}`;
+    const serverHostname = new URL(config.serverUrl).hostname;
+    const scheme = new URL(config.serverUrl).protocol.replace(':', '') || 'http';
 
     switch (config.serverType) {
       case 'mediamtx':
-        return `${config.serverUrl}/${streamName}/index.m3u8`;
+        return `${scheme}://${serverHostname}:${config.hlsPort}/${streamName}/index.m3u8`;
       case 'go2rtc':
-        return `${config.serverUrl}/api/stream.m3u8?src=${streamName}`;
+        return `${scheme}://${serverHostname}:${config.hlsPort}/api/stream.m3u8?src=${streamName}`;
       case 'srs':
-        return `${config.serverUrl}/live/${streamName}.m3u8`;
+        return `${scheme}://${serverHostname}:${config.hlsPort}/live/${streamName}.m3u8`;
       default:
-        return `${config.serverUrl}/${streamName}/index.m3u8`;
+        return `${scheme}://${serverHostname}:${config.hlsPort}/${streamName}/index.m3u8`;
     }
   } catch {
     return '';
@@ -270,18 +276,24 @@ export function generateHlsUrl(rtspUrl: string, config: MediaServerConfig): stri
 /** Generate WebRTC WHEP URL from RTSP URL */
 export function generateWebRtcUrl(rtspUrl: string, config: MediaServerConfig): string {
   try {
+    if (!rtspUrl.toLowerCase().startsWith('rtsp://')) {
+      return '';
+    }
     const url = new URL(rtspUrl.replace('rtsp://', 'http://'));
-    const streamName = `cam_${url.hostname.replace(/\./g, '_')}${url.port && url.port !== '554' ? '_' + url.port : ''}`;
-    const serverHostname = new URL(config.serverUrl).hostname;
+    const pathPart = url.pathname.replace(/^\/+/, '').replace(/\/+$/, '').replace(/\//g, '_') || 'stream';
+    const streamName = `cam_${url.hostname.replace(/\./g, '_')}${url.port && url.port !== '554' ? '_' + url.port : ''}_${pathPart}`;
+    const baseUrl = new URL(config.serverUrl);
+    const serverHostname = baseUrl.hostname;
+    const scheme = baseUrl.protocol.replace(':', '') || 'http';
 
     switch (config.serverType) {
       case 'mediamtx':
         // MediaMTX offers a browser-ready WebRTC page at /<streamName>/.
-        return `http://${serverHostname}:${config.webrtcPort}/${streamName}/`;
+        return `${scheme}://${serverHostname}:${config.webrtcPort}/${streamName}/`;
       case 'go2rtc':
-        return `${config.serverUrl}/api/webrtc?src=${streamName}`;
+        return `${scheme}://${serverHostname}:${config.webrtcPort}/api/webrtc?src=${streamName}`;
       default:
-        return `http://${serverHostname}:${config.webrtcPort}/${streamName}/whep`;
+        return `${scheme}://${serverHostname}:${config.webrtcPort}/${streamName}/whep`;
     }
   } catch {
     return '';
@@ -307,7 +319,7 @@ export function loadMediaServerConfig(): MediaServerConfig | null {
 /** Get default media server config */
 export function getDefaultMediaServerConfig(): MediaServerConfig {
   return {
-    serverUrl: 'http://localhost:8888',
+    serverUrl: 'http://localhost:9997',
     serverType: 'mediamtx',
     hlsEnabled: true,
     webrtcEnabled: true,

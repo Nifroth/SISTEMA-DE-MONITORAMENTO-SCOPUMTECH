@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { createEvent, fetchEvents, fetchStreams, fetchZones, MonitoringEvent, MonitoringZone, type CameraStream } from '@/lib/api';
 import { UserPlus, UserMinus, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import StreamPlayer from '@/components/StreamPlayer';
+import StreamPlayer from '@/components/stream/StreamPlayer';
 
 export default function MonitorPage() {
   const [zones, setZones] = useState<MonitoringZone[]>([]);
@@ -68,7 +68,7 @@ export default function MonitorPage() {
       </div>
 
       {/* Camera Grid with Stream Players */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
         {activeZones.slice(0, 4).map((zone) => {
           const stream = streams.find((s) => s.zone_id === zone.id);
           return (
