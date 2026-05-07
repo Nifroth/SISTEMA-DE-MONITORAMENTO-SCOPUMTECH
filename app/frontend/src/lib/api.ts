@@ -1,3 +1,6 @@
+import { createClient } from '@metagptx/web-sdk';
+
+export const client = createClient();
 const viteEnv = (import.meta as ImportMeta & { env?: Record<string, string> }).env;
 const API_BASE_URL = (viteEnv?.VITE_API_BASE_URL || '').replace(/\/+$/, '');
 const REQUEST_TIMEOUT_MS = 12000;
