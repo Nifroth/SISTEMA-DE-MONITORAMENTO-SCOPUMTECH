@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
-import { client } from '../lib/api';
+import { createClient } from '@metagptx/web-sdk';
+
+const client = createClient();
 
 export default function AuthCallback() {
   useEffect(() => {
