@@ -3,7 +3,7 @@ import {
   fetchStreams, fetchZones, createStream, updateStream, deleteStream,
   CameraStream, MonitoringZone, MediaServerConfig,
   generateHlsUrl, generateWebRtcUrl,
-  saveMediaServerConfig, loadMediaServerConfig, getDefaultMediaServerConfig,
+  saveMediaServerConfig, loadMediaServerConfig, getDefaultMediaServerConfig, convertStreamDirect, autoOnboardCamera,
 } from '@/lib/api';
 import {
   Plus, Trash2, Edit2, Save, X, Camera, Wifi, WifiOff, AlertTriangle,
@@ -72,6 +72,7 @@ export default function CamerasPage() {
   const [testResult, setTestResult] = useState<'success' | 'error' | null>(null);
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [useWebRtc, setUseWebRtc] = useState(false);
+  const [autoRegisterOnSave, setAutoRegisterOnSave] = useState(true);
 
   useEffect(() => {
     const saved = loadMediaServerConfig();
@@ -133,6 +134,30 @@ export default function CamerasPage() {
     }
   }
 
+  async function resolveBrowserStreamUrl(streamUrl: string): Promise<{ browserUrl: string; streamType: StreamType }> {
+    if (formData.hls_url.trim()) {
+      return { browserUrl: formData.hls_url.trim(), streamType: formData.stream_type };
+    }
+
+    if (!streamUrl.toLowerCase().startsWith('rtsp://') || !autoRegisterOnSave) {
+      return { browserUrl: '', streamType: formData.stream_type };
+    }
+
+    try {
+      const converted = await convertStreamDirect(streamUrl, mediaConfig);
+      if (useWebRtc && converted.webrtc_url) {
+        return { browserUrl: converted.webrtc_url, streamType: 'iframe' };
+      }
+      if (converted.hls_url) {
+        return { browserUrl: converted.hls_url, streamType: 'hls' };
+      }
+    } catch (error) {
+      console.warn('Auto-registration on MediaMTX failed, keeping manual URL flow:', error);
+    }
+
+    return { browserUrl: '', streamType: formData.stream_type };
+  }
+
   function handleCopyUrl(url: string) {
     navigator.clipboard.writeText(url);
     setCopiedUrl(true);
@@ -171,38 +196,69 @@ export default function CamerasPage() {
     if (!streamUrl && !formData.hls_url) return;
 
     try {
+      if (!editingId && autoRegisterOnSave && formData.protocol === 'rtsp' && formData.ip_address && formData.username) {
+        try {
+          const onboarded = await autoOnboardCamera({
+            zone_id: formData.zone_id,
+            camera_ip: formData.ip_address,
+            camera_port: formData.port || 554,
+            username: formData.username,
+            password: formData.password,
+            channel: formData.channel || 1,
+            vendor_hint: formData.camera_brand || undefined,
+            stream_name: formData.camera_name || undefined,
+            media_server_url: mediaConfig.serverUrl,
+            hls_port: mediaConfig.hlsPort,
+            webrtc_port: mediaConfig.webrtcPort,
+            resolution: formData.resolution,
+            fps: formData.fps,
+            bitrate: formData.bitrate,
+          });
+          setStreams((prev) => [...prev, onboarded]);
+          const resolvedType: StreamType = useWebRtc ? 'iframe' : 'hls';
+          setStreamTypes((prev) => ({ ...prev, [onboarded.id]: resolvedType }));
+          resetForm();
+          return;
+        } catch (onboardError) {
+          console.warn('Auto-onboard failed, using manual save fallback:', onboardError);
+        }
+      }
+
+      const { browserUrl, streamType } = await resolveBrowserStreamUrl(streamUrl);
+      const finalBrowserUrl = formData.hls_url.trim() || browserUrl;
       if (editingId) {
         const updated = await updateStream(editingId, {
           zone_id: formData.zone_id,
           stream_url: streamUrl,
           protocol: formData.protocol,
-          hls_url: formData.hls_url,
-          status: formData.status,
+          hls_url: finalBrowserUrl,
+          status: finalBrowserUrl ? 'online' : formData.status,
           resolution: formData.resolution,
           fps: formData.fps,
           bitrate: formData.bitrate,
           last_connected: new Date().toISOString(),
         });
         setStreams((prev) => prev.map((s) => (s.id === editingId ? updated : s)));
-        setStreamTypes((prev) => ({ ...prev, [editingId]: formData.stream_type }));
+        setStreamTypes((prev) => ({ ...prev, [editingId]: streamType }));
       } else {
         const newStream = await createStream({
           zone_id: formData.zone_id,
           stream_url: streamUrl,
           protocol: formData.protocol,
-          hls_url: formData.hls_url,
-          status: formData.status,
+          hls_url: finalBrowserUrl,
+          status: finalBrowserUrl ? 'online' : formData.status,
           resolution: formData.resolution,
           fps: formData.fps,
           bitrate: formData.bitrate,
           last_connected: new Date().toISOString(),
         });
         setStreams((prev) => [...prev, newStream]);
-        setStreamTypes((prev) => ({ ...prev, [newStream.id]: formData.stream_type }));
+        setStreamTypes((prev) => ({ ...prev, [newStream.id]: streamType }));
       }
       resetForm();
     } catch (error) {
       console.error('Error saving stream:', error);
+      alert('Não foi possível cadastrar a câmera. Verifique zona, URL e conexão com backend.');
     }
   }
 
@@ -664,6 +720,15 @@ export default function CamerasPage() {
                   />
                   <span className="text-xs text-slate-300">Usar WebRTC (menor latência)</span>
                 </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={autoRegisterOnSave}
+                    onChange={(e) => setAutoRegisterOnSave(e.target.checked)}
+                    className="rounded border-slate-600 bg-[#1E293B] text-cyan-500 focus:ring-cyan-500"
+                  />
+                  <span className="text-xs text-slate-300">Registrar no MediaMTX ao salvar</span>
+                </label>
                 {formData.hls_url && (
                   <button
                     type="button"
@@ -681,7 +746,7 @@ export default function CamerasPage() {
                 </div>
               )}
               <p className="text-[10px] text-slate-500 mt-2">
-                Requer servidor de mídia configurado. Configure acima em &quot;Servidor de Mídia&quot;.
+                Com &quot;Registrar no MediaMTX ao salvar&quot; ativo, o sistema tenta criar o path automaticamente via API :9997.
               </p>
             </div>
 

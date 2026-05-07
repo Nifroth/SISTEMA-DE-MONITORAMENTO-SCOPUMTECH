@@ -31,6 +31,13 @@ export interface CameraStream {
   protocol: 'rtsp' | 'rtmp';
   hls_url: string;
   webrtc_url?: string;
+  stream_name?: string;
+  camera_ip?: string;
+  camera_port?: number;
+  camera_username?: string;
+  camera_channel?: number;
+  vendor?: string;
+  last_error?: string;
   status: 'online' | 'offline' | 'error';
   resolution: string;
   fps: number;
@@ -115,6 +122,32 @@ export async function fetchStreams(): Promise<CameraStream[]> {
 
 export async function createStream(data: Omit<CameraStream, 'id' | 'created_at' | 'updated_at'>): Promise<CameraStream> {
   const response = await client.entities.camera_streams.create({ data });
+  return response.data;
+}
+
+export interface AutoOnboardCameraPayload {
+  zone_id: number;
+  camera_ip: string;
+  camera_port: number;
+  username: string;
+  password: string;
+  channel: number;
+  vendor_hint?: string;
+  stream_name?: string;
+  media_server_url: string;
+  hls_port: number;
+  webrtc_port: number;
+  resolution: string;
+  fps: number;
+  bitrate: string;
+}
+
+export async function autoOnboardCamera(payload: AutoOnboardCameraPayload): Promise<CameraStream> {
+  const response = await client.apiCall.invoke({
+    url: '/api/v1/entities/camera_streams/auto-onboard',
+    method: 'POST',
+    data: payload,
+  });
   return response.data;
 }
 

@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db
 from services.camera_streams import Camera_streamsService
+from services.stream_manager import AutoStreamRequest, StreamManager
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -24,6 +25,14 @@ class Camera_streamsData(BaseModel):
     stream_url: str
     protocol: str
     hls_url: str = None
+    webrtc_url: Optional[str] = None
+    stream_name: Optional[str] = None
+    camera_ip: Optional[str] = None
+    camera_port: Optional[int] = None
+    camera_username: Optional[str] = None
+    camera_channel: Optional[int] = None
+    vendor: Optional[str] = None
+    last_error: Optional[str] = None
     status: str
     resolution: str = None
     fps: int = None
@@ -37,6 +46,14 @@ class Camera_streamsUpdateData(BaseModel):
     stream_url: Optional[str] = None
     protocol: Optional[str] = None
     hls_url: Optional[str] = None
+    webrtc_url: Optional[str] = None
+    stream_name: Optional[str] = None
+    camera_ip: Optional[str] = None
+    camera_port: Optional[int] = None
+    camera_username: Optional[str] = None
+    camera_channel: Optional[int] = None
+    vendor: Optional[str] = None
+    last_error: Optional[str] = None
     status: Optional[str] = None
     resolution: Optional[str] = None
     fps: Optional[int] = None
@@ -51,6 +68,14 @@ class Camera_streamsResponse(BaseModel):
     stream_url: str
     protocol: str
     hls_url: Optional[str] = None
+    webrtc_url: Optional[str] = None
+    stream_name: Optional[str] = None
+    camera_ip: Optional[str] = None
+    camera_port: Optional[int] = None
+    camera_username: Optional[str] = None
+    camera_channel: Optional[int] = None
+    vendor: Optional[str] = None
+    last_error: Optional[str] = None
     status: str
     resolution: Optional[str] = None
     fps: Optional[int] = None
@@ -90,6 +115,23 @@ class Camera_streamsBatchUpdateRequest(BaseModel):
 class Camera_streamsBatchDeleteRequest(BaseModel):
     """Batch delete request"""
     ids: List[int]
+
+
+class CameraAutoOnboardRequest(BaseModel):
+    zone_id: int
+    camera_ip: str
+    camera_port: int = 554
+    username: str
+    password: str
+    channel: int = 1
+    vendor_hint: Optional[str] = None
+    stream_name: Optional[str] = None
+    media_server_url: str = "http://localhost:9997"
+    hls_port: int = 8888
+    webrtc_port: int = 8889
+    resolution: str = "1920x1080"
+    fps: int = 30
+    bitrate: str = "4Mbps"
 
 
 # ---------- Routes ----------
@@ -213,6 +255,62 @@ async def create_camera_streams(
     except Exception as e:
         logger.error(f"Error creating camera_streams: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+
+@router.post("/auto-onboard", response_model=Camera_streamsResponse, status_code=201)
+async def auto_onboard_camera_stream(
+    data: CameraAutoOnboardRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Create stream from camera credentials and auto-register on MediaMTX."""
+    service = Camera_streamsService(db)
+    manager = StreamManager()
+    try:
+        stream_data = await manager.onboard_camera(
+            AutoStreamRequest(
+                zone_id=data.zone_id,
+                camera_ip=data.camera_ip,
+                camera_port=data.camera_port,
+                username=data.username,
+                password=data.password,
+                channel=data.channel,
+                vendor_hint=data.vendor_hint,
+                stream_name=data.stream_name,
+                media_server_url=data.media_server_url,
+                hls_port=data.hls_port,
+                webrtc_port=data.webrtc_port,
+                resolution=data.resolution,
+                fps=data.fps,
+                bitrate=data.bitrate,
+            )
+        )
+        created = await service.create(
+            {
+                "zone_id": data.zone_id,
+                "stream_url": stream_data["rtsp_url"],
+                "protocol": stream_data["protocol"],
+                "hls_url": stream_data["hls_url"],
+                "webrtc_url": stream_data["webrtc_url"],
+                "stream_name": stream_data["stream_name"],
+                "camera_ip": data.camera_ip,
+                "camera_port": data.camera_port,
+                "camera_username": data.username,
+                "camera_channel": data.channel,
+                "vendor": stream_data["vendor"],
+                "last_error": None,
+                "status": stream_data["status"],
+                "resolution": stream_data["resolution"],
+                "fps": stream_data["fps"],
+                "bitrate": stream_data["bitrate"],
+                "last_connected": datetime.now().isoformat(),
+            }
+        )
+        return created
+    except ValueError as err:
+        raise HTTPException(status_code=400, detail=str(err))
+    except Exception as err:
+        logger.error(f"Error auto-onboarding stream: {str(err)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Failed to auto-onboard stream: {str(err)}")
 
 
 @router.post("/batch", response_model=List[Camera_streamsResponse], status_code=201)
