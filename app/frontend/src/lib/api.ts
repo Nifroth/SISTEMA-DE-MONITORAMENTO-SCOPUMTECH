@@ -2,7 +2,15 @@ import { createClient } from '@metagptx/web-sdk';
 
 export const client = createClient();
 const viteEnv = (import.meta as ImportMeta & { env?: Record<string, string> }).env;
-const API_BASE_URL = (viteEnv?.VITE_API_BASE_URL || '').replace(/\/+$/, '');
+function normalizeApiBaseUrl(value: string): string {
+  const trimmed = (value || '').trim().replace(/\/+$/, '');
+  if (!trimmed) return '';
+
+  // Common deploy mistake: using /health or /docs URL as API base.
+  return trimmed.replace(/\/(health|docs)$/i, '');
+}
+
+const API_BASE_URL = normalizeApiBaseUrl(viteEnv?.VITE_API_BASE_URL || '');
 const REQUEST_TIMEOUT_MS = 12000;
 const RETRYABLE_STATUS = new Set([408, 429, 500, 502, 503, 504]);
 
