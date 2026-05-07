@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from core.database import db_manager
+from models.monitoring_zones import Monitoring_zones
 from sqlalchemy import Date, DateTime, MetaData, Table, func, select
 from sqlalchemy.exc import NoSuchTableError, SQLAlchemyError
 
@@ -44,6 +45,44 @@ async def initialize_mock_data():
                 logger.error("Unexpected error loading %s: %s", data_file.name, exc)
 
     await asyncio.gather(*(load_file(data_file) for data_file in data_files))
+
+
+async def ensure_minimum_operational_data():
+    """
+    Guarantee required bootstrap data exists for first-use flows in production.
+
+    This runs even when MGX_IGNORE_INIT_DATA is enabled, so the UI can always
+    list at least one monitoring zone and allow camera registration tests.
+    """
+    if "MGX_SKIP_MINIMUM_DATA" in os.environ:
+        logger.info("Skipping minimum operational data bootstrap (MGX_SKIP_MINIMUM_DATA set)")
+        return
+
+    if not db_manager.async_session_maker:
+        logger.warning("Database session maker is unavailable; skipping minimum data bootstrap")
+        return
+
+    async with db_manager.async_session_maker() as session:
+        try:
+            total = await session.scalar(select(func.count()).select_from(Monitoring_zones))
+            if total and total > 0:
+                logger.info("Minimum data check: monitoring_zones already has %s row(s)", total)
+                return
+
+            default_zone = Monitoring_zones(
+                name="Zona Principal",
+                zone_type="internal",
+                camera_id="CAM-DEFAULT",
+                status="active",
+                location="Área padrão",
+            )
+            session.add(default_zone)
+            await session.commit()
+            logger.info("Created default monitoring zone for first deployment")
+        except Exception as exc:
+            await session.rollback()
+            logger.error("Failed to ensure minimum operational data: %s", exc, exc_info=True)
+            raise
 
 
 def _prepare_records(raw_data: Any, table: Table) -> list[dict[str, Any]]:

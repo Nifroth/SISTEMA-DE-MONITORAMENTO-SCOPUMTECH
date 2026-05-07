@@ -15,6 +15,7 @@ from fastapi.routing import APIRouter
 # MODULE_IMPORTS_START
 from services.database import initialize_database, close_database
 from services.mock_data import initialize_mock_data
+from services.mock_data import ensure_minimum_operational_data
 from services.auth import initialize_admin_user
 # MODULE_IMPORTS_END
 
@@ -68,6 +69,7 @@ async def lifespan(app: FastAPI):
     # MODULE_STARTUP_START
     await initialize_database()
     await initialize_mock_data()
+    await ensure_minimum_operational_data()
     await initialize_admin_user()
     # MODULE_STARTUP_END
 
