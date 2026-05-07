@@ -1,6 +1,45 @@
-import { createClient } from '@metagptx/web-sdk';
+const viteEnv = (import.meta as ImportMeta & { env?: Record<string, string> }).env;
+const API_BASE_URL = (viteEnv?.VITE_API_BASE_URL || '').replace(/\/+$/, '');
+const REQUEST_TIMEOUT_MS = 12000;
+const RETRYABLE_STATUS = new Set([408, 429, 500, 502, 503, 504]);
 
-export const client = createClient();
+async function apiJson<T>(path: string, init?: RequestInit, retries = 1): Promise<T> {
+  if (!API_BASE_URL) {
+    throw new Error('VITE_API_BASE_URL não configurado.');
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  try {
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+      headers: { 'Content-Type': 'application/json', ...(init?.headers || {}) },
+      ...init,
+      signal: controller.signal,
+    });
+    if (!response.ok) {
+      const text = await response.text();
+      if (retries > 0 && RETRYABLE_STATUS.has(response.status)) {
+        return apiJson<T>(path, init, retries - 1);
+      }
+      throw new Error(`API ${response.status}: ${text || response.statusText}`);
+    }
+    if (response.status === 204) return undefined as T;
+    return (await response.json()) as T;
+  } catch (error) {
+    const retriableNetworkError =
+      error instanceof TypeError ||
+      (error instanceof DOMException && error.name === 'AbortError');
+    if (retries > 0 && retriableNetworkError) {
+      return apiJson<T>(path, init, retries - 1);
+    }
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw new Error('Tempo limite excedido ao conectar com a API.');
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
 
 export interface MonitoringZone {
   id: number;
@@ -90,39 +129,40 @@ export interface FacialRecognitionRecord {
 
 // Monitoring Zones
 export async function fetchZones(): Promise<MonitoringZone[]> {
-  const response = await client.entities.monitoring_zones.query({
-    query: {},
-    limit: 50,
-  });
-  return response.data.items || [];
+  const response = await apiJson<{ items: MonitoringZone[] }>(`/api/v1/entities/monitoring_zones?limit=50`);
+  return response.items || [];
 }
 
 export async function fetchEvents(limit = 200, skip = 0, query: Record<string, unknown> = {}): Promise<{ items: MonitoringEvent[]; total: number }> {
-  const response = await client.entities.monitoring_events.query({
-    query,
+  const params = new URLSearchParams({
+    limit: String(limit),
+    skip: String(skip),
     sort: '-timestamp',
-    limit,
-    skip,
+    query: JSON.stringify(query),
   });
-  return { items: response.data.items || [], total: response.data.total || 0 };
+  const response = await apiJson<{ items: MonitoringEvent[]; total: number }>(
+    `/api/v1/entities/monitoring_events?${params.toString()}`
+  );
+  return { items: response.items || [], total: response.total || 0 };
 }
 
 export async function createEvent(data: Omit<MonitoringEvent, 'id' | 'created_at' | 'updated_at'>): Promise<MonitoringEvent> {
-  const response = await client.entities.monitoring_events.create({ data });
-  return response.data;
+  return await apiJson<MonitoringEvent>('/api/v1/entities/monitoring_events', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
 }
 
 export async function fetchStreams(): Promise<CameraStream[]> {
-  const response = await client.entities.camera_streams.query({
-    query: {},
-    limit: 50,
-  });
-  return response.data.items || [];
+  const response = await apiJson<{ items: CameraStream[] }>(`/api/v1/entities/camera_streams?limit=50`);
+  return response.items || [];
 }
 
 export async function createStream(data: Omit<CameraStream, 'id' | 'created_at' | 'updated_at'>): Promise<CameraStream> {
-  const response = await client.entities.camera_streams.create({ data });
-  return response.data;
+  return await apiJson<CameraStream>('/api/v1/entities/camera_streams', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
 }
 
 export interface AutoOnboardCameraPayload {
@@ -143,126 +183,140 @@ export interface AutoOnboardCameraPayload {
 }
 
 export async function autoOnboardCamera(payload: AutoOnboardCameraPayload): Promise<CameraStream> {
-  const response = await client.apiCall.invoke({
-    url: '/api/v1/entities/camera_streams/auto-onboard',
+  return await apiJson<CameraStream>('/api/v1/entities/camera_streams/auto-onboard', {
     method: 'POST',
-    data: payload,
+    body: JSON.stringify(payload),
   });
-  return response.data;
 }
 
 export async function updateStream(id: number, data: Partial<CameraStream>): Promise<CameraStream> {
-  const response = await client.entities.camera_streams.update({ id, data });
-  return response.data;
+  return await apiJson<CameraStream>(`/api/v1/entities/camera_streams/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
 }
 
 export async function deleteStream(id: number): Promise<void> {
-  await client.entities.camera_streams.delete({ id });
+  await apiJson<void>(`/api/v1/entities/camera_streams/${id}`, { method: 'DELETE' });
 }
 
 // Sectors
 export async function fetchSectors(): Promise<Sector[]> {
-  const response = await client.entities.sectors.query({
-    query: {},
-    limit: 100,
-  });
-  return response.data.items || [];
+  const response = await apiJson<{ items: Sector[] }>(`/api/v1/entities/sectors?limit=100`);
+  return response.items || [];
 }
 
 export async function createSector(data: Omit<Sector, 'id' | 'created_at' | 'updated_at'>): Promise<Sector> {
-  const response = await client.entities.sectors.create({ data });
-  return response.data;
+  return await apiJson<Sector>('/api/v1/entities/sectors', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
 }
 
 export async function updateSector(id: number, data: Partial<Sector>): Promise<Sector> {
-  const response = await client.entities.sectors.update({ id, data });
-  return response.data;
+  return await apiJson<Sector>(`/api/v1/entities/sectors/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
 }
 
 export async function deleteSector(id: number): Promise<void> {
-  await client.entities.sectors.delete({ id });
+  await apiJson<void>(`/api/v1/entities/sectors/${id}`, { method: 'DELETE' });
 }
 
 // Environment Groups
 export async function fetchGroups(): Promise<EnvironmentGroup[]> {
-  const response = await client.entities.environment_groups.query({
-    query: {},
-    limit: 100,
-  });
-  return response.data.items || [];
+  const response = await apiJson<{ items: EnvironmentGroup[] }>(`/api/v1/entities/environment_groups?limit=100`);
+  return response.items || [];
 }
 
 export async function createGroup(data: Omit<EnvironmentGroup, 'id' | 'created_at' | 'updated_at'>): Promise<EnvironmentGroup> {
-  const response = await client.entities.environment_groups.create({ data });
-  return response.data;
+  return await apiJson<EnvironmentGroup>('/api/v1/entities/environment_groups', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
 }
 
 export async function updateGroup(id: number, data: Partial<EnvironmentGroup>): Promise<EnvironmentGroup> {
-  const response = await client.entities.environment_groups.update({ id, data });
-  return response.data;
+  return await apiJson<EnvironmentGroup>(`/api/v1/entities/environment_groups/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
 }
 
 export async function deleteGroup(id: number): Promise<void> {
-  await client.entities.environment_groups.delete({ id });
+  await apiJson<void>(`/api/v1/entities/environment_groups/${id}`, { method: 'DELETE' });
 }
 
 // Sector Group Assignments
 export async function fetchSectorGroupAssignments(): Promise<SectorGroupAssignment[]> {
-  const response = await client.entities.sector_group_assignments.query({
-    query: {},
-    limit: 200,
-  });
-  return response.data.items || [];
+  const response = await apiJson<{ items: SectorGroupAssignment[] }>(
+    `/api/v1/entities/sector_group_assignments?limit=200`
+  );
+  return response.items || [];
 }
 
 export async function createSectorGroupAssignment(data: Omit<SectorGroupAssignment, 'id' | 'created_at' | 'updated_at'>): Promise<SectorGroupAssignment> {
-  const response = await client.entities.sector_group_assignments.create({ data });
-  return response.data;
+  return await apiJson<SectorGroupAssignment>('/api/v1/entities/sector_group_assignments', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
 }
 
 export async function deleteSectorGroupAssignment(id: number): Promise<void> {
-  await client.entities.sector_group_assignments.delete({ id });
+  await apiJson<void>(`/api/v1/entities/sector_group_assignments/${id}`, { method: 'DELETE' });
 }
 
 // Facial Recognition Records
 export async function fetchFacialRecords(limit = 500, skip = 0, query: Record<string, unknown> = {}): Promise<{ items: FacialRecognitionRecord[]; total: number }> {
-  const response = await client.entities.facial_recognition_records.query({
-    query,
+  const params = new URLSearchParams({
+    limit: String(limit),
+    skip: String(skip),
     sort: '-timestamp',
-    limit,
-    skip,
+    query: JSON.stringify(query),
   });
-  return { items: response.data.items || [], total: response.data.total || 0 };
+  const response = await apiJson<{ items: FacialRecognitionRecord[]; total: number }>(
+    `/api/v1/entities/facial_recognition_records?${params.toString()}`
+  );
+  return { items: response.items || [], total: response.total || 0 };
 }
 
 // Zone CRUD
 export async function createZone(data: Omit<MonitoringZone, 'id' | 'created_at' | 'updated_at'>): Promise<MonitoringZone> {
-  const response = await client.entities.monitoring_zones.create({ data });
-  return response.data;
+  return await apiJson<MonitoringZone>('/api/v1/entities/monitoring_zones', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
 }
 
 export async function updateZone(id: number, data: Partial<MonitoringZone>): Promise<MonitoringZone> {
-  const response = await client.entities.monitoring_zones.update({ id, data });
-  return response.data;
+  return await apiJson<MonitoringZone>(`/api/v1/entities/monitoring_zones/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
 }
 
 export async function deleteZone(id: number): Promise<void> {
-  await client.entities.monitoring_zones.delete({ id });
+  await apiJson<void>(`/api/v1/entities/monitoring_zones/${id}`, { method: 'DELETE' });
 }
 
 // Facial Recognition CRUD
 export async function createFacialRecord(data: Omit<FacialRecognitionRecord, 'id' | 'created_at' | 'updated_at'>): Promise<FacialRecognitionRecord> {
-  const response = await client.entities.facial_recognition_records.create({ data });
-  return response.data;
+  return await apiJson<FacialRecognitionRecord>('/api/v1/entities/facial_recognition_records', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
 }
 
 export async function updateFacialRecord(id: number, data: Partial<FacialRecognitionRecord>): Promise<FacialRecognitionRecord> {
-  const response = await client.entities.facial_recognition_records.update({ id, data });
-  return response.data;
+  return await apiJson<FacialRecognitionRecord>(`/api/v1/entities/facial_recognition_records/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
 }
 
 export async function deleteFacialRecord(id: number): Promise<void> {
-  await client.entities.facial_recognition_records.delete({ id });
+  await apiJson<void>(`/api/v1/entities/facial_recognition_records/${id}`, { method: 'DELETE' });
 }
 
 // ============================================================
@@ -415,18 +469,16 @@ export async function convertStreamById(
   cameraStreamId: number,
   config: MediaServerConfig,
 ): Promise<ConvertStreamResponse> {
-  const response = await client.apiCall.invoke({
-    url: '/api/v1/stream-converter/convert',
+  return await apiJson<ConvertStreamResponse>('/api/v1/stream-converter/convert', {
     method: 'POST',
-    data: {
+    body: JSON.stringify({
       camera_stream_id: cameraStreamId,
       media_server_url: `http://${new URL(config.serverUrl).hostname}:${config.apiPort}`,
       hls_port: config.hlsPort,
       webrtc_port: config.webrtcPort,
       server_type: config.serverType,
-    },
+    }),
   });
-  return response.data;
 }
 
 /** Convert an RTSP/RTMP URL directly (no DB record needed) */
@@ -434,50 +486,44 @@ export async function convertStreamDirect(
   streamUrl: string,
   config: MediaServerConfig,
 ): Promise<ConvertStreamResponse> {
-  const response = await client.apiCall.invoke({
-    url: '/api/v1/stream-converter/convert-direct',
+  return await apiJson<ConvertStreamResponse>('/api/v1/stream-converter/convert-direct', {
     method: 'POST',
-    data: {
+    body: JSON.stringify({
       stream_url: streamUrl,
       media_server_url: `http://${new URL(config.serverUrl).hostname}:${config.apiPort}`,
       hls_port: config.hlsPort,
       webrtc_port: config.webrtcPort,
       server_type: config.serverType,
-    },
+    }),
   });
-  return response.data;
 }
 
 /** Batch-convert all camera streams */
 export async function batchConvertStreams(
   config: MediaServerConfig,
 ): Promise<BatchConvertResponse> {
-  const response = await client.apiCall.invoke({
-    url: '/api/v1/stream-converter/batch-convert',
+  return await apiJson<BatchConvertResponse>('/api/v1/stream-converter/batch-convert', {
     method: 'POST',
-    data: {
+    body: JSON.stringify({
       media_server_url: `http://${new URL(config.serverUrl).hostname}:${config.apiPort}`,
       hls_port: config.hlsPort,
       webrtc_port: config.webrtcPort,
       server_type: config.serverType,
-    },
+    }),
   });
-  return response.data;
 }
 
 /** Check media server health via backend */
 export async function checkServerHealth(
   config: MediaServerConfig,
 ): Promise<ServerHealthResponse> {
-  const response = await client.apiCall.invoke({
-    url: '/api/v1/stream-converter/server-health',
+  return await apiJson<ServerHealthResponse>('/api/v1/stream-converter/server-health', {
     method: 'POST',
-    data: {
+    body: JSON.stringify({
       media_server_url: `http://${new URL(config.serverUrl).hostname}:${config.apiPort}`,
       server_type: config.serverType,
-    },
+    }),
   });
-  return response.data;
 }
 
 /** Check a specific stream's health via backend */
@@ -485,29 +531,25 @@ export async function checkStreamHealth(
   streamName: string,
   config: MediaServerConfig,
 ): Promise<StreamHealthResponse> {
-  const response = await client.apiCall.invoke({
-    url: '/api/v1/stream-converter/stream-health',
+  return await apiJson<StreamHealthResponse>('/api/v1/stream-converter/stream-health', {
     method: 'POST',
-    data: {
+    body: JSON.stringify({
       stream_name: streamName,
       media_server_url: `http://${new URL(config.serverUrl).hostname}:${config.apiPort}`,
       server_type: config.serverType,
-    },
+    }),
   });
-  return response.data;
 }
 
 /** List all active streams on the media server via backend */
 export async function listMediaServerStreams(
   config: MediaServerConfig,
 ): Promise<StreamListResponse> {
-  const response = await client.apiCall.invoke({
-    url: '/api/v1/stream-converter/stream-list',
+  return await apiJson<StreamListResponse>('/api/v1/stream-converter/stream-list', {
     method: 'POST',
-    data: {
+    body: JSON.stringify({
       media_server_url: `http://${new URL(config.serverUrl).hostname}:${config.apiPort}`,
       server_type: config.serverType,
-    },
+    }),
   });
-  return response.data;
 }

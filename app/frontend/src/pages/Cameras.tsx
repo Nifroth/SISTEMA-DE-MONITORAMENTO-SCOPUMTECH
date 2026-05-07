@@ -221,6 +221,7 @@ export default function CamerasPage() {
           return;
         } catch (onboardError) {
           console.warn('Auto-onboard failed, using manual save fallback:', onboardError);
+          alert('Auto configuração no MediaMTX falhou. A câmera será salva em modo manual.');
         }
       }
 
